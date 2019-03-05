@@ -15,6 +15,6 @@ typedef struct {
 
 StudentDescriptor newDescriptor();
 
-void printDescriptor();
+void printDescriptor(StudentDescriptor d);
 
 #endif
