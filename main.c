@@ -3,12 +3,13 @@
 
 #include "student_descriptor.h"
 #include "input.h"
+#include "student.h"
 
 int main() {
 
-	StudentDescriptor d = enterDescriptor("New student: \n");
-	
-	printDescriptor(d);
+	Student *student = enterStudent("New student\n");
+
+	printStudent(student);
 
 	while (getchar() != '#');
 

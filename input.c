@@ -54,3 +54,17 @@ StudentDescriptor enterDescriptor(const char *message) {
 
 	return  newDescriptor(first, last, middle, sem);
 }
+
+Payload enterPayload(const char *message) {
+	int data = enterInt(message);
+	return newPayload(data);
+}
+
+Student * enterStudent(const char *message) {
+	printf("%s", message);
+	
+	StudentDescriptor descriptor = enterDescriptor("Enter student data: \n");
+	Payload payload = enterPayload("Enter student payload: ");
+	
+	return newStudent(descriptor, payload);
+}
