@@ -13,7 +13,7 @@ typedef struct {
 
 } StudentDescriptor;
 
-StudentDescriptor newDescriptor();
+StudentDescriptor newDescriptor(char *firstname, char *lastname, char *middlename, int semester);
 
 void printDescriptor(StudentDescriptor d);
 
