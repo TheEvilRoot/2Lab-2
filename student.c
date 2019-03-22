@@ -6,6 +6,10 @@
 Student * newStudent(StudentDescriptor descriptor, Payload payload) {
 	Student *student = (Student*) malloc(sizeof(Student));
 
+	if (student == NULL) {
+		return NULL;
+	}
+
 	student->descriptor = descriptor;
 	student->payload = payload;
 

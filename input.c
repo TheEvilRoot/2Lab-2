@@ -44,6 +44,15 @@ int enterInt(const char *message) {
 	return ret;
 }
 
+char enterChar(const char *message) {
+	printf("%s", message);
+
+	fflush(stdin);
+	fseek(stdin, 0, SEEK_END);
+	char ret = getchar();
+
+	return ret;
+}
 
 StudentDescriptor enterDescriptor(const char *message) {
 	printf("%s", message);
