@@ -84,8 +84,48 @@ int * queryStudents(Student **students,int length ,char *query, int *result) {
 			*result = ret != NULL;
 			return ret;
 		}
-	} else { 
-		
+	} else {
+		int isEquals = 1;
+		char *fn = s->descriptor.firstName;
+		for (int q = 0; q < spcaeIndex; q++) {
+			if (fn[q] != query[q]) {
+				isEquals = 0;
+			}
+		}
+		if (isEquals) {
+			char *ln = s->descriptor.lastName;
+			char *mn = s->descriptor.middleName;
+			for (int q = spaceIndex + 1; q < queryLength; q++) {
+				if (ln[q] != query[q]) {
+					isEquals = 0;
+				}
+			}
+
+			if (!isEquals) {
+				isEquals = 1;
+				for (int q = spaceIndex + 1; q < queryLength; q++) {
+					if (mn[q] != query[q]) {
+						isEquals = 0;
+					}
+				}	
+			}
+
+			if (isEquals) {
+				count++;
+				if (ret == NULL || count == 0) {
+					ret = (int*) calloc(count, sizeof(int));
+					ret[count - 1] = i;
+				} else {
+					ret = (int*) realloc(ret, sizeof(int) * count);
+					ret[count - 1] = i;
+				}
+
+				if (ret == NULL) {
+					*result = 0;
+					return NULL;
+				}
+			}
+		}
 	}
 }
 
