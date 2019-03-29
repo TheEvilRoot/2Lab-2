@@ -2,12 +2,20 @@
 #define _payload_h
 
 #include <stdlib.h>
-
 typedef union {
-	int data;
+	struct {
+			
+	} first;
+	Semester second;
+	Semester third;
+	Semester fourth;
+	Semester fifth;
+	Semester sixth;
+	Semester seventh;
+	Semester eighth;
 } Payload;
 
-Payload newPayload(int data);
+Payload newPayload(int sem, );
 void printPayload(Payload payload);
 
 #endif
