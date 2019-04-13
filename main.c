@@ -6,8 +6,12 @@
 //  Copyright © 2019 Доктор Кларик. All rights reserved.
 //
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+#ifdef _WIN32
+#define scanf scanf_s
+#endif
 
 #define boolean unsigned int
 #define true 1
@@ -99,6 +103,13 @@ boolean isValidSemester(int num) {
 }
 
 // Should check existance of semester number in argv
+// Will recognize the last valid number in [argv] array as semester then break the loop.
+// Example:
+// argv =	[123, 1, 22, 5]	-> 1
+// argv =	[2, 1, 2, 1, 2]	-> 2
+// argv =	[asd, 1, 2, a]	-> 2
+// argv =	[]				-> 0
+// argv =	[a, b, c, 1234]	-> 0
 int parseArguments(const int argc, char *argv[]) {
   int semester = 0;
   for (int i = argc - 1; i >= 1; i--) {
@@ -143,7 +154,6 @@ string enterString(const string message) {
   return str;
 }
 
-
 int enterInt(const string message) {
   int ret = 0;
   
@@ -184,6 +194,26 @@ void enterExam(const char *message, int *id, int *res) {
   *res = result;
 }
 
+// @NullWarning 
+boolean copyString(char *original, char **dist) {
+	
+	if (original == NULL || dist == NULL) {
+		return false;
+	}
+
+	int length = stringLength(original);
+	(*dist) = (string) calloc(length + 1, sizeof(char)); // Checked
+	if (*dist == NULL) {
+		return false;
+	}
+
+	for (int i = 0; i < length; i++) {
+		(*dist)[i] = original[i];
+	}
+	(*dist)[length] = '\0';
+	return true;
+}
+
 // @Nullable
 Student * enterStudent(const string message) {
   printf("%s", message);
@@ -197,8 +227,8 @@ Student * enterStudent(const string message) {
   // [ ] Enter student's id
   
   string firstName = enterString("Enter student's first name: "); // Checked
-  string lastName = enterString("Enter student's last name: ");
-  string middleName = enterString("Enter student's middle name: ");
+  string lastName = enterString("Enter student's last name: "); // Checked
+  string middleName = enterString("Enter student's middle name: "); // Checked
   int semester = 0;
   do {
     semester = enterInt("Enter semester: ");
@@ -210,41 +240,20 @@ Student * enterStudent(const string message) {
   
   // [ ] Copy first name
   
-  int length = stringLength(firstName);
-  student->id.firstName = (string) calloc(length, sizeof(char)); // Checked
-  
-  if (student->id.firstName == NULL) {
-    return NULL;
+  if (!copyString(firstName, &student->id.firstName)) {
+	  return NULL;
   }
-  
-  for (int i = 0; i < length; i++) {
-    student->id.firstName[i] = firstName[i];
-  }
-  
+
   // [ ] Copy last name
-  
-  length = stringLength(lastName);
-  student->id.lastName = (string) calloc(length, sizeof(char)); // Checked
-  
-  if (student->id.lastName == NULL) {
-    return NULL;
-  }
-  
-  for (int i = 0; i < length; i++) {
-    student->id.lastName[i] = lastName[i];
+ 
+  if (!copyString(lastName, &student->id.lastName)) {
+	  return NULL;
   }
   
   // [ ] Copy middle name
   
-  length = stringLength(middleName);
-  student->id.middleName = (string) calloc(length, sizeof(char)); // Checked
-  
-  if (student->id.middleName == NULL) {
-    return NULL;
-  }
-  
-  for (int i = 0; i < length; i++) {
-    student->id.middleName[i] = middleName[i];
+  if (!copyString(middleName, &student->id.middleName)) {
+	  return NULL;
   }
   
   // [ ] Set semester
@@ -329,7 +338,7 @@ int main(const int argc, char *argv[]) {
   
   int semesterToFind = parseArguments(argc, argv);
   if (!isValidSemester(semesterToFind)) {
-    printf("I'm a potato. Your arguments is invalid\n");
+	enterChar("I'm a potato. Your arguments is invalid\n");
     return 1;
   }
   
@@ -349,13 +358,20 @@ int main(const int argc, char *argv[]) {
   
   // [ ] Output according argument input
   
+  boolean anyPrinted = false;
   for (int i = 0; i < studentCount; i++) {
     if (students[i]->id.semester != semesterToFind) continue;
   
     // [ ] Here all students have necessary semester, let's print them
-    
+
+	anyPrinted = true;
     printStudent(students[i]);
   }
-  
+
+  if (!anyPrinted) {
+	  printf("There's no students with %d semester.\n", semesterToFind);
+  }
+
+  enterChar("Press any key to exit the program...\n");
   return 0;
 }
