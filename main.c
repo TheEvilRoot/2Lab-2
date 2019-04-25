@@ -102,13 +102,13 @@ boolean isValidSemester(int num) {
   return num > 0 && num < 3;
 }
 
-// Should check existance of semester number in argv
+// Should check existence of semester number in argv
 // Will recognize the last valid number in [argv] array as semester then break the loop.
 // Example:
 // argv =	[123, 1, 22, 5]	-> 1
 // argv =	[2, 1, 2, 1, 2]	-> 2
 // argv =	[asd, 1, 2, a]	-> 2
-// argv =	[]				-> 0
+// argv =	[]              -> 0
 // argv =	[a, b, c, 1234]	-> 0
 int parseArguments(const int argc, char *argv[]) {
   int semester = 0;
@@ -180,12 +180,12 @@ void enterExam(const char *message, int *id, int *res) {
   for (int i = 0; i < EXAM_COUNT; i++) {
     printf("[%d]: %s\n", i, localizeExam(i));
   }
-  int choice = -1;
+  int choice;
   do {
     choice = enterInt("Enter exam ID: ");
   } while (choice < 0 || choice >= EXAM_COUNT);
   
-  int result = -1;
+  int result;
   do {
     result = enterInt("Enter result for this exam: ");
   } while (result < 0 || result > 10);
@@ -293,8 +293,8 @@ Student ** initStudents(int *lengthPtr) {
       break;
     }
     
-    char confirm = enterChar("Do you want to enter another student?\n'y' to continue, anything else to stop\n#");
-    if (confirm != 'y') {
+    char *confirm = enterString("Do you want to enter another student?\n'y' to continue, anything else to stop\n#");
+    if (confirm == NULL || stringLength(confirm) == 0 || (confirm[0] != 'Y' && confirm[0] != 'y')) {
       break;
     }
     
@@ -338,7 +338,7 @@ int main(const int argc, char *argv[]) {
   
   int semesterToFind = parseArguments(argc, argv);
   if (!isValidSemester(semesterToFind)) {
-	enterChar("I'm a potato. Your arguments is invalid\n");
+	  enterChar("I'm a potato. Your arguments is invalid\n");
     return 1;
   }
   
@@ -363,8 +363,7 @@ int main(const int argc, char *argv[]) {
     if (students[i]->id.semester != semesterToFind) continue;
   
     // [ ] Here all students have necessary semester, let's print them
-
-	anyPrinted = true;
+    anyPrinted = true;
     printStudent(students[i]);
   }
 
